@@ -1,0 +1,142 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+ol,
+ul {
+  padding-left: 30px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.block-square {
+  background: #000;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  /* margin: 2px; */
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+.prev {
+  /* background: black; */
+  /* color: white; */
+  font-size: 16px;
+  display: block;
+  float: left;
+  box-sizing: border-box;
+  width: 48%;
+  margin: 0 2% 10px 0;
+}
+
+.next {
+  /* background: black; */
+  /* color: white; */
+  font-size: 16px;
+  display: block;
+  float: right;
+  box-sizing: border-box;
+  width: 48%;
+  margin: 0 0 10px 2%;
+}
+.hide {
+  border: none !important;
+  color: none !important;
+  background: none !important;
+}
+.water-entry,
+.water-exit,
+.water {
+  background: rgb(198, 228, 253);
+}
+.game {
+  display: flex;
+  flex-direction: row;
+}
+.block-board {
+  width: fit-content;
+  border-style: solid;
+  padding: 1px;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+.drag-container {
+  text-align: center;
+}
+
+.head {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  background-color: #cccccc;
+  width: 100%;
+}
+.droppable {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  right: 0;
+  top: 10;
+  background-color: #9e9e9e;
+  border-left: 2px dotted red;
+}
+
+.draggable {
+  width: 100px;
+  height: 100px;
+  background-color: yellow;
+  margin: 10px auto;
+}
+
+.inProgress {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 0;
+  top: 10;
+  background-color: #eeeeee;
+  border-right: 2px dotted red;
+}
