@@ -470,16 +470,13 @@ export default class Game extends React.Component {
                     bricks[j] = waterBlock[0];
                   }
                   // further
-                  // str +=
-                  //   "<br> ---left sideof " +
-                  //   startPoint +
-                  //   JSON.stringify(waterBlock);
-                  // // now check if can flow down
-                  // if (bricks[cols + j].type === "block") {
-                  //   // do nothing
-                  // } else {
-                  //   break;
-                  // }
+                  
+                  // // now check if can not flow down
+                  if (bricks[cols + j].type === "block") {
+                    //continuously flow water to right
+                  } else {
+                    break;
+                  }
                 }
               }
               // right-side
