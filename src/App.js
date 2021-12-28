@@ -1,6 +1,8 @@
 import "./index.css";
 import React from "react";
-import { cloneElement } from "react/cjs/react.production.min";
+import Slider from 'react-rangeslider';
+import 'react-rangeslider/lib/index.css';
+
 
 function Square(props) {
   let typeClass = "";
@@ -96,7 +98,7 @@ function Columns(props) {
   return <div className="board-row">{cols}</div>;
 }
 function Rows(props) {
-  let rows = [];
+  let rows = [''];
   for (let i = 0; i < props.rows; i++) {
     rows.push(
       <Columns
@@ -153,8 +155,8 @@ class Blocks extends React.Component {
 }
 
 export default class Game extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       bricks: new Array(12)
         .fill({ type: "brick", display: "body" })
@@ -183,8 +185,8 @@ export default class Game extends React.Component {
     blockArry = blockArry.map((item, index) => {
       return { ...item, id: index };
     });
-    if (e.target.value !== "" && e.target.value > 0) {
-      cols = parseInt(e.target.value, 10);
+    if (e !== "" && e > 0) {
+      cols = parseInt(e, 10);
       arry = new Array(rows * cols).fill({ type: "brick", display: "body" });
       arry = await arry.map((item, index) => {
         return { ...item, id: index };
@@ -206,8 +208,8 @@ export default class Game extends React.Component {
     blockArry = blockArry.map((item, index) => {
       return { ...item, id: index };
     });
-    if (e.target.value !== "" && e.target.value > 0) {
-      rows = parseInt(e.target.value, 10);
+    if (e !== "" && e > 0) {
+      rows = parseInt(e, 10);
       brickArry = new Array(rows * cols).fill({
         type: "brick",
         display: "body"
@@ -224,6 +226,7 @@ export default class Game extends React.Component {
   };
 
   onChangeBlocks = async (e) => {
+    // console.log(e);
     let len = null;
     let blockArry = [];
     let rows = this.state.rows;
@@ -236,8 +239,9 @@ export default class Game extends React.Component {
       return { ...item, id: index };
     });
 
-    if (e.target.value !== "" && e.target.value > 0) {
-      len = parseInt(e.target.value, 10);
+    if (e !== "" && e > 0) {
+      len = parseInt(e, 10);
+      console.log(len, '-------------------');
       blockArry = new Array(len).fill({ type: "block", display: "body" });
       blockArry = await blockArry.map((item, index) => {
         return { ...item, id: index };
@@ -589,27 +593,52 @@ export default class Game extends React.Component {
         </div>
         <div className={"next"}>
           <div className="game-info">
-            Columns:{" "}
-            <input
+            Columns:{" "}{this.state.cols}
+              <Slider
+              min={4}
+              max={40}
+                value={this.state.cols}
+                steps={10}
+                orientation="horizontal"
+                onChange={this.onChangeCols}
+              />
+            {/* <input
               type="text"
               value={this.state.cols}
               onChange={this.onChangeCols}
-            />
+            /> */}
             <div>
-              Rows:{" "}
-              <input
+              Rows:{" "}{this.state.rows}
+              <Slider
+              min={4}
+              max={40}
+                value={this.state.rows}
+                steps={10}
+                orientation="horizontal"
+                onChange={this.onChangeRows}
+              />
+              {/* <input
                 type="text"
                 value={this.state.rows}
                 onChange={this.onChangeRows}
-              />
+              /> */}
             </div>
-            <div>
-              Blocks:{" "}
-              <input
+            <div className='slider'>
+              Blocks:{" "}{this.state.blocks}
+              {/* <input
                 type="text"
                 value={this.state.blocks}
                 onChange={this.onChangeBlocks}
+              /> */}
+              <Slider
+              min={4}
+              max={40}
+                value={this.state.blocks}
+                steps={10}
+                orientation="horizontal"
+                onChange={this.onChangeBlocks}
               />
+              
             </div>
             <div
               className="block-board"
