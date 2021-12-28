@@ -1,5 +1,6 @@
 import "./index.css";
 import React from "react";
+import { cloneElement } from "react/cjs/react.production.min";
 
 function Square(props) {
   let typeClass = "";
@@ -19,6 +20,7 @@ function Square(props) {
       className += " " + brick.display;
     }
     return (
+      brick.type === "block" ? 
       <button
         key={brick.id}
         data-id={brick.id}
@@ -28,7 +30,17 @@ function Square(props) {
         onDragStart={(event) => props.onDragStart(event, brick.id, brick.type)}
         onClick={props.onClick}
       >
-        {brick.id}
+        {/* {brick.id} */}
+      </button>
+      : 
+      <button
+        key={brick.id}
+        data-id={brick.id}
+        data-type={brick.type}
+        className={typeClass ? className + " " + typeClass : className}
+        onClick={props.onClick}
+      >
+        {/* {brick.id} */}
       </button>
     );
   } else {
@@ -276,6 +288,7 @@ export default class Game extends React.Component {
       let type = event.dataTransfer.getData("type");
       const tid = event.target.getAttribute("data-id");
       const ttype = event.target.getAttribute("data-type");
+      // const drag = event.target.getAttribute("data-drag");
       let bricks = this.state.bricks.map((brick) => {
         if (brick.id == tid) {
           return { id: brick.id, type: type, display: "body" };
@@ -337,15 +350,24 @@ export default class Game extends React.Component {
     // step1: hide other entry points
     let hideOthers = this.hideOtherStartPoints(startPoint);
     // step2 Inspect Waterflow
-    let waterFlow = this.runInspection(startPoint);
-    console.log(waterFlow);
+    let [bricks,result] = this.runInspection(startPoint);
+    let bricksFoot = [...this.state.bricksFoot];
+    //console.log('result ----',result);
+    bricksFoot.map((item,i)=>{
+        item.display = result.includes(item.id) ? 'water':'hide';
+        return item;
+    })
+    // console.log(bricks);
+    console.log('result',bricksFoot);
     this.setState({
-      bricks: waterFlow,
+      bricks: bricks,
       bricksHead: hideOthers,
-      startPoint
+      startPoint,
+      bricksFoot:bricksFoot
     });
   };
   runInspection = (startPoint) => {
+    let result = [];
     let cols = this.state.cols;
     let rows = this.state.rows;
     let bricks = this.state.bricks.map((a) => ({ ...a }));
@@ -495,6 +517,7 @@ export default class Game extends React.Component {
           if (bricks[startPoint].type === "block") {
             // continue;
           } else {
+            // result[l]=l;
             // flow water in the current box
             let waterBlock = bricks.filter((brick) => {
               return brick.id === startPoint;
@@ -505,9 +528,16 @@ export default class Game extends React.Component {
             }
           }
         }
+
+        // last row data result
+      let lastRow = bricks.slice((i) * cols, (i+1) * cols);
+      let finalWaterBricks = lastRow.filter((item,i) => {
+        if( item.display === "water") result.push(i);
+      });
+      console.log(result,i, (i) * cols, (i+1) * cols,);
       }
     } // end for
-    return bricks;
+    return [bricks,result];
   };
   render() {
     let blocks = this.state.blocks;
