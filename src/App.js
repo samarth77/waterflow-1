@@ -22,7 +22,7 @@ function Square(props) {
       className += " " + brick.display;
     }
     return (
-      brick.type === "block" ? 
+      brick.type === "block" && brick.drag ? 
       <button
         key={brick.id}
         data-id={brick.id}
@@ -159,7 +159,7 @@ export default class Game extends React.Component {
     super(props, context);
     this.state = {
       bricks: new Array(12)
-        .fill({ type: "brick", display: "body" })
+        .fill({ type: "brick", display: "body", drag:false })
         .map((item, index) => {
           return { ...item, id: index };
         }),
@@ -167,7 +167,7 @@ export default class Game extends React.Component {
       cols: 4,
       blocks: 4,
       blockBricks: new Array(4)
-        .fill({ type: "block", display: "body" })
+        .fill({ type: "block", display: "body", drag:true })
         .map((item, index) => {
           return { ...item, id: index };
         }),
@@ -181,13 +181,13 @@ export default class Game extends React.Component {
     let rows = this.state.rows;
     let arry = [];
     let len = this.state.blocks;
-    let blockArry = new Array(len).fill({ type: "block", display: "body" });
+    let blockArry = new Array(len).fill({ type: "block", display: "body", drag:true });
     blockArry = blockArry.map((item, index) => {
       return { ...item, id: index };
     });
     if (e !== "" && e > 0) {
       cols = parseInt(e, 10);
-      arry = new Array(rows * cols).fill({ type: "brick", display: "body" });
+      arry = new Array(rows * cols).fill({ type: "brick", display: "body", drag:false });
       arry = await arry.map((item, index) => {
         return { ...item, id: index };
       });
@@ -204,7 +204,7 @@ export default class Game extends React.Component {
     let cols = this.state.cols;
     let brickArry = [];
     let len = this.state.blocks;
-    let blockArry = new Array(len).fill({ type: "block", display: "body" });
+    let blockArry = new Array(len).fill({ type: "block", display: "body", drag:true });
     blockArry = blockArry.map((item, index) => {
       return { ...item, id: index };
     });
@@ -212,7 +212,7 @@ export default class Game extends React.Component {
       rows = parseInt(e, 10);
       brickArry = new Array(rows * cols).fill({
         type: "brick",
-        display: "body"
+        display: "body", drag:false
       });
       brickArry = await brickArry.map((item, index) => {
         return { ...item, id: index };
@@ -233,7 +233,7 @@ export default class Game extends React.Component {
     let cols = this.state.cols;
     let brickArry = new Array(rows * cols).fill({
       type: "brick",
-      display: "body"
+      display: "body", drag:false
     });
     brickArry = brickArry.map((item, index) => {
       return { ...item, id: index };
@@ -242,7 +242,7 @@ export default class Game extends React.Component {
     if (e !== "" && e > 0) {
       len = parseInt(e, 10);
       console.log(len, '-------------------');
-      blockArry = new Array(len).fill({ type: "block", display: "body" });
+      blockArry = new Array(len).fill({ type: "block", display: "body" , drag:true});
       blockArry = await blockArry.map((item, index) => {
         return { ...item, id: index };
       });
@@ -261,7 +261,7 @@ export default class Game extends React.Component {
     } else {
       this.setState({
         bricks: new Array(12)
-          .fill({ type: "brick", display: "body" })
+          .fill({ type: "brick", display: "body" , drag:false})
           .map((item, index) => {
             return { ...item, id: index };
           }),
@@ -269,7 +269,7 @@ export default class Game extends React.Component {
         cols: 4,
         blocks: 4,
         blockBricks: new Array(4)
-          .fill({ type: "block", display: "body" })
+          .fill({ type: "block", display: "body", drag:true })
           .map((item, index) => {
             return { ...item, id: index };
           }),
@@ -295,15 +295,15 @@ export default class Game extends React.Component {
       // const drag = event.target.getAttribute("data-drag");
       let bricks = this.state.bricks.map((brick) => {
         if (brick.id == tid) {
-          return { id: brick.id, type: type, display: "body" };
+          return { id: brick.id, type: type, display: "body", drag:false };
         }
-        return { id: brick.id, type: brick.type, display: "body" };
+        return { id: brick.id, type: brick.type, display: "body" , drag:false};
       });
       let blockBricks = this.state.blockBricks.map((brick) => {
         if (brick.id == id) {
-          return { id: brick.id, type: ttype, display: "body" };
+          return { id: brick.id, type: ttype, display: "body", drag:false };
         }
-        return { id: brick.id, type: brick.type, display: "body" };
+        return { id: brick.id, type: brick.type, display: "body", drag:true };
       });
       // console.log(bricks, blockBricks);
       this.setState({
@@ -322,12 +322,12 @@ export default class Game extends React.Component {
         bricksHead: new Array(cols)
           .fill({ type: "brick" })
           .map((item, index) => {
-            return { ...item, id: index, display: "body" };
+            return { ...item, id: index, display: "body", drag:false };
           }),
         bricksFoot: new Array(cols)
           .fill({ type: "brick" })
           .map((item, index) => {
-            return { ...item, id: index, display: "body" };
+            return { ...item, id: index, display: "body", drag:false };
           })
       }
     });
@@ -341,12 +341,13 @@ export default class Game extends React.Component {
     let hideOthers = this.state.bricksHead.map((brick) => {
       let id = brick.id;
       let type = brick.type;
+      let drag = brick.drag;
       let display = brick.display;
       let newDisplay = "hide";
       if (id === startPoint) {
         newDisplay = display;
       }
-      return { id, type, display: newDisplay };
+      return { id, type, display: newDisplay, drag };
     });
     return hideOthers;
   };
